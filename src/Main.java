@@ -1,6 +1,7 @@
 import monade.Student;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,6 +25,15 @@ public class Main {
                     return c[0];
                 });
 
+        Student student03 = new Student("111 333", 15, true);
+        Lazy<String> composed = Lazy.from(student03)
+                .map(Student::getNameStudent)
+                .map(s -> s.split(" "))
+                .map(c -> {
+                    System.out.println(c[0]);
+                    return c[0];
+                });
+        composed.get();
     }
 
     //Монада - это возможность записать последоватеьность действий
@@ -48,7 +58,6 @@ public class Main {
         public <U> Monad<U> map(Function<T, U> mapFunc) {
             return flatMap(val -> new Monad<>(mapFunc.apply(val)));
         }
-
     }
 
     public static class Optional<T> {
@@ -79,6 +88,39 @@ public class Main {
             } else {
                 return (Optional<U>)empty;
             }
+        }
+    }
+
+    public static class Lazy<T> {
+        T value;
+
+        Supplier<T> supplier;
+
+        private Lazy(T value) {
+            this.value = value;
+        }
+
+        private Lazy(Supplier<T> supplier) {
+            this.supplier = supplier;
+        }
+
+        public static <T> Lazy<T> from(T value) {
+            return new Lazy<>(value);
+        }
+
+        public T get() {
+            if(value == null) {
+                value = supplier.get();
+            }
+            return value;
+        }
+
+        public <U> Lazy<U> flatMap(Function<T, Lazy<U>> mapFunc) {
+            return mapFunc.apply(value);
+        }
+
+        public <U> Lazy<U> map(Function<T, U> mapFunc) {
+            return new Lazy<>(() -> mapFunc.apply(get()));
         }
     }
 }
