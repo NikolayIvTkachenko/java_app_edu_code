@@ -16,7 +16,9 @@ public class Main {
 
     public static void mainProgram02(){
         RxjavaSample01 rxjavaSample01 = new RxjavaSample01();
-        rxjavaSample01.sampleCode01();
+        //rxjavaSample01.sampleCode01();
+        //rxjavaSample01.sampleCode02();
+        rxjavaSample01.sampleCode03();
     }
 
     public static void mainProgram01(){
