@@ -1,4 +1,5 @@
 import monade.Student;
+import rxjava.RxjavaSample01;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -7,13 +8,25 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Start Programming");
 
+
+        mainProgram02();
+
+
+    }
+
+    public static void mainProgram02(){
+        RxjavaSample01 rxjavaSample01 = new RxjavaSample01();
+        rxjavaSample01.sampleCode01();
+    }
+
+    public static void mainProgram01(){
         Student student01 = new Student("Dart Vader", 15, true);
         Monad.from(student01)
                 .map(Student::getNameStudent)
                 .map(s -> s.split(" "))
                 .map(c -> {
-                            System.out.println(c[0]);
-                            return c[0];
+                    System.out.println(c[0]);
+                    return c[0];
                 });
 
         Student student02 = new Student(null, 15, true);
@@ -124,3 +137,6 @@ public class Main {
         }
     }
 }
+
+//https://www.youtube.com/watch?v=xBbq01FPBC8&ab_channel=SergeyArkhipovJavaTutorials
+//https://www.youtube.com/watch?v=IhH97tkAhs4&t=100s&ab_channel=SergeyArkhipovJavaTutorials
