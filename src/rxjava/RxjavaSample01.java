@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 //https://www.youtube.com/watch?v=yWdl58IXuPQ&list=PLZ3FH0lcV0117kiek3g-qiQDkO4ezy_Ro&index=4&ab_channel=Codiguard
 //https://www.youtube.com/watch?v=rkP-em-bBvg&t=1s&ab_channel=SergeyArkhipovJavaTutorials
 
+//https://www.youtube.com/watch?v=Kx1S_wtwA2g&list=PLZ3FH0lcV0117kiek3g-qiQDkO4ezy_Ro&index=6&ab_channel=Codiguard
+
 public class RxjavaSample01 {
 
     public RxjavaSample01() {
@@ -184,6 +186,43 @@ public class RxjavaSample01 {
             }
         });
 
+    }
+
+    public void sampleCode06() {
+
+        Completable completable = createCompletable();
+        completable.subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                System.out.println("Subscribe");
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("Complete");
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                System.out.println("Error");
+            }
+        });
+
+
+    }
+
+    private Completable createCompletable() {
+        return Completable.fromAction(actionPerformSomething());
+    }
+
+    private Action actionPerformSomething() {
+        return new Action() {
+            @Override
+            public void run() throws Throwable {
+                System.out.println("actionPerformSomething");
+                System.out.println("Thread Name: " + Thread.currentThread().getName());
+            }
+        };
     }
 
     private Maybe<String> createMaybe(){
