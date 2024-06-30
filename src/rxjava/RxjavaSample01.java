@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.*;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -210,6 +211,94 @@ public class RxjavaSample01 {
 
 
     }
+
+
+    public void sampleCode07() {
+        System.out.println("sampleCode07()");
+        //some source emits items at the very fast pace
+        //items are emitted much faster than downstream can process it
+        //----------------------------------
+        //items are processed much faster when asynchronicity is introduced
+        //we can use observeOn() method to introduce asynchronicity
+        //The problem
+        //producer no longer waits for observer to complete its processing
+        //Solution - Flowable and backpressure
+        //Backpressure
+        //Process of slowing down producer using one of the available stragies
+        //Flowable - one of flavor of Observable which support backpressure mechanism
+
+        //synchronousObservableExample();
+        //asyncObservableExample();
+        asyncFlowableExample();
+
+
+        new Scanner(System.in).nextLine();
+    }
+
+
+    private void synchronousObservableExample() {
+        System.out.println("synchronousObservableExample()");
+        Observable.range(1, 1000000)
+                .map(id -> new ItemValue(id))
+                .subscribe( item -> {
+                   Thread.sleep(1000);
+                   System.out.println("Observable => Received Items = " +item.value + "\n");
+                });
+
+    }
+
+    private void asyncObservableExample() {
+        System.out.println("asyncObservableExample()");
+        Observable.range(1, 100000)
+                .map(ItemValue::new)
+                .observeOn(Schedulers.io())
+                .subscribe( item -> {
+                   Thread.sleep(1000);
+                   System.out.println("Observable Schedulers.io() => Received Item = " +item.value + "\n");
+                });
+
+//        try{
+//            Thread.sleep(Long.MAX_VALUE);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void asyncFlowableExample() {
+        System.out.println("asyncFlowableExample()");
+        Flowable.range(1, 100000)
+                .map(ItemValue::new)
+                .observeOn(Schedulers.io())
+                .subscribe( item -> {
+                   Thread.sleep(20);
+                    System.out.println(" Flowable Received Item = " +item.value + "\n");
+                });
+
+//        try{
+//            Thread.sleep(Long.MAX_VALUE);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
+    private class ItemValue {
+        private Integer value;
+
+        public ItemValue(Integer value) {
+            this.value = value;
+            System.out.println("ItemValue is created " + value);
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public void setValue(Integer value) {
+            this.value = value;
+        }
+    }
+
 
     private Completable createCompletable() {
         return Completable.fromAction(actionPerformSomething());

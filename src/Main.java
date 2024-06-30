@@ -25,8 +25,8 @@ public class Main {
         //rxjavaSample01.sampleCode04();
         //Thread.sleep(5000);
         //rxjavaSample01.sampleCode05();
-        rxjavaSample01.sampleCode06();
-
+        //rxjavaSample01.sampleCode06();
+        rxjavaSample01.sampleCode07();
 
 
     }
