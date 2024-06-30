@@ -11,13 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-//https://www.youtube.com/watch?v=IhH97tkAhs4&t=101s&ab_channel=SergeyArkhipovJavaTutorials
-//https://www.youtube.com/watch?v=ApUUN55V2RE&list=PLZ3FH0lcV0117kiek3g-qiQDkO4ezy_Ro&index=2&ab_channel=Codiguard //rx
-//https://www.youtube.com/watch?v=yWdl58IXuPQ&list=PLZ3FH0lcV0117kiek3g-qiQDkO4ezy_Ro&index=4&ab_channel=Codiguard
-//https://www.youtube.com/watch?v=rkP-em-bBvg&t=1s&ab_channel=SergeyArkhipovJavaTutorials
-
-//https://www.youtube.com/watch?v=Kx1S_wtwA2g&list=PLZ3FH0lcV0117kiek3g-qiQDkO4ezy_Ro&index=6&ab_channel=Codiguard
-
 public class RxjavaSample01 {
 
     public RxjavaSample01() {

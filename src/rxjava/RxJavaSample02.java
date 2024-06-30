@@ -5,19 +5,20 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.observables.ConnectableObservable;
 import io.reactivex.rxjava3.observers.ResourceObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class RxJavaSample02 {
 
-    public RxJavaSample02(){}
+    public RxJavaSample02() {
+    }
 
     public void sampleCode01_cold_hot_observable() {
-        try{
+        try {
             //coldObservableExample();
             hotObservableExample();
         } catch (Exception e) {
@@ -35,7 +36,7 @@ public class RxJavaSample02 {
         observable.subscribe((item) -> System.out.println("Observer 3 - " + item));
     }
 
-    private void hotObservableExample() throws InterruptedException{
+    private void hotObservableExample() throws InterruptedException {
         ConnectableObservable observable = Observable.interval(1, TimeUnit.SECONDS).publish();
 
         observable.connect(); //старт observable
@@ -67,7 +68,7 @@ public class RxJavaSample02 {
 
         Disposable disposable = seconds.subscribe(ss -> System.out.println("Item: " + ss));
 
-        if(disposable.isDisposed()) {
+        if (disposable.isDisposed()) {
             disposable.dispose();
         }
 
@@ -126,10 +127,7 @@ public class RxJavaSample02 {
 
         seconds.subscribe(resourceObserver);
         resourceObserver.dispose();
-
     }
-
-
 
     public void sampleCode03_filtering_conditional() {
         Observable.just("Hello", "my", "World")
@@ -213,7 +211,7 @@ public class RxJavaSample02 {
                 .buffer(3)
                 .subscribe(item -> System.out.println(item));
 
-        Observable.just("a", "a", "bb", "bb", "ccc", "ccc","d","ff", "eee")
+        Observable.just("a", "a", "bb", "bb", "ccc", "ccc", "d", "ff", "eee")
                 .groupBy(item -> item.length())
                 .flatMapSingle(group -> group.toList())
                 .subscribe(item -> System.out.println(item));
@@ -244,6 +242,82 @@ public class RxJavaSample02 {
     }
 
     public void sampleCode05_error_utilities() {
+        Observable.just(1, 2, 3, 4)
+                .delay(2, TimeUnit.SECONDS)
+                .subscribe(item -> System.out.println(item));
+
+        //new Scanner(System.in).nextLine();
+
+        Observable.just(5, 6, 7, 8)
+                .timeout(5, TimeUnit.SECONDS)
+                .subscribe(item -> System.out.println(item));
+
+        //new Scanner(System.in).nextLine();
+
+        System.out.println(Thread.currentThread().getName());
+        Observable.just("Test message!")
+                .observeOn(Schedulers.io())
+                .subscribe(item -> {
+                            System.out.println(Thread.currentThread().getName());
+                            System.out.println(item);
+                        }
+                );
+
+        System.out.println(Thread.currentThread().getName());
+        Observable.just("Test message 2!")
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(item -> {
+                            System.out.println(Thread.currentThread().getName());
+                            System.out.println(item);
+                        }
+                );
+
+        Observable.just(1, 2, 3, 4)
+                .doOnNext(item -> System.out.println("Log in: ->"))
+                .filter(item -> item >= 3)
+                .subscribe(item -> System.out.println(item));
+
+
+        Disposable disposable = Observable.timer(1, TimeUnit.SECONDS)
+                .doOnDispose(() -> System.out.println("Disposable called!"))
+                .subscribe( item -> {
+                    System.out.println(item);
+                });
+        disposable.dispose();
+
+
+        Observable.just(2, 1, 0)
+                .map(item -> 2 / item)
+                .retry(1)
+                .subscribe(item -> {;
+                    System.out.println("item = " + item);
+                }, throwable -> {
+                    System.out.println("Error = " + throwable.getMessage());
+                });
+
+        Observable.just(2, 1, 0)
+                .map(item -> 2 / item)
+                .onErrorReturnItem(-1)
+                .subscribe(item -> {;
+                    System.out.println("item = " + item);
+                }, throwable -> {
+                    System.out.println("Error = " + throwable.getMessage());
+                });
+
+        Observable.just(2, 1, 0)
+                .map(item -> 2 / item)
+                .onErrorResumeWith(Observable.just(5, 6, 7))
+                .subscribe(item -> {;
+                    System.out.println("item = " + item);
+                }, throwable -> {
+                    System.out.println("Error = " + throwable.getMessage());
+                });
+
+    }
+
+    public void sampleCode06_subject() {
+
+
 
     }
 

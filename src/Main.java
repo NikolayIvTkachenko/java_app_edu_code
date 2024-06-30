@@ -34,7 +34,8 @@ public class Main {
         //rxJavaSample02.sampleCode02_disposable();
         //rxJavaSample02.sampleCode03_filtering_conditional();
         //rxJavaSample02.sampleCode04_transforming_combining();
-        rxJavaSample02.sampleCode05_error_utilities();
+        //rxJavaSample02.sampleCode05_error_utilities();
+        rxJavaSample02.sampleCode06_subject();
 
 
 
@@ -158,6 +159,3 @@ public class Main {
         }
     }
 }
-
-//https://www.youtube.com/watch?v=xBbq01FPBC8&ab_channel=SergeyArkhipovJavaTutorials
-//https://www.youtube.com/watch?v=IhH97tkAhs4&t=100s&ab_channel=SergeyArkhipovJavaTutorials
