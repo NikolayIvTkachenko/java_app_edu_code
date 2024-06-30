@@ -233,6 +233,13 @@ public class RxjavaSample01 {
 
 
         new Scanner(System.in).nextLine();
+
+        //Backpresure strategies
+        //MISSING - no backpressure strategy at all
+        //ERROR - downstream throws an exception right away when it cannot keep up with the source
+        //BUFFER - items are buffered until downstream is able to handle it
+        //LATEST - last emission is kept until downstream as able to handle it
+        //DROP - when downstream cannot handle new emissions, all of these emissions are discarded
     }
 
 
@@ -279,7 +286,7 @@ public class RxjavaSample01 {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-
+        //Flowable.create(source, strategy)
     }
 
     private class ItemValue {

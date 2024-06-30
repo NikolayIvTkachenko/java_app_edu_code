@@ -1,4 +1,5 @@
 import monade.Student;
+import rxjava.RxJavaSample02;
 import rxjava.RxjavaSample01;
 
 import java.util.function.Function;
@@ -19,6 +20,7 @@ public class Main {
 
     public static void mainProgram02() throws InterruptedException {
         RxjavaSample01 rxjavaSample01 = new RxjavaSample01();
+        RxJavaSample02 rxJavaSample02 = new RxJavaSample02();
         //rxjavaSample01.sampleCode01();
         //rxjavaSample01.sampleCode02();
         //rxjavaSample01.sampleCode03();
@@ -26,7 +28,10 @@ public class Main {
         //Thread.sleep(5000);
         //rxjavaSample01.sampleCode05();
         //rxjavaSample01.sampleCode06();
-        rxjavaSample01.sampleCode07();
+        //rxjavaSample01.sampleCode07();
+
+        rxJavaSample02.sampleCode01_cold_hot_observable();
+
 
 
     }
