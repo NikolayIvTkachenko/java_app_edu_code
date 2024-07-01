@@ -2,12 +2,15 @@ package rxjava;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableOperator;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.observables.ConnectableObservable;
+import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.observers.ResourceObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.subjects.*;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -316,6 +319,128 @@ public class RxJavaSample02 {
     }
 
     public void sampleCode06_subject() {
+
+        //PublishSubject
+        System.out.println("PublishSubject");
+        Observable<Long> source1 = Observable.interval(1, TimeUnit.SECONDS);
+        Observable<Long> source2 = Observable.interval(1, TimeUnit.SECONDS);
+
+        Subject<Long> subject = PublishSubject.create();
+
+        subject.subscribe(item -> System.out.println("Received item " + item));
+
+        source1.subscribe(subject);
+        source2.subscribe(subject);
+
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        //---------------------------------------------------------------------------------------
+
+        //BehaviorSubject
+        System.out.println("BehaviorSubject");
+        Subject<Integer> subject02 = BehaviorSubject.create();
+
+        subject02.subscribe(item -> System.out.println("One, Something happen = " + item));
+        subject02.onNext(1);
+        subject02.onNext(2);
+        subject02.onNext(3);
+
+        subject02.subscribe(item -> System.out.println("Second, Something happen = " + item));
+
+        //ReplaySubject
+        System.out.println("ReplaySubject");
+        Subject<Integer> subject03 = ReplaySubject.create();
+        subject03.subscribe(item -> System.out.println("First, Received data = " + item));
+        subject03.onNext(1);
+        subject03.onNext(2);
+        subject03.onNext(3);
+
+        subject03.subscribe(item -> System.out.println("Second, Received data = " + item));
+
+        //AsyncSubject
+        System.out.println("AsyncSubject");
+        AsyncSubject<Integer> subject04 = AsyncSubject.create();
+
+        subject04.subscribe(item -> System.out.println("First, Received data = " + item));
+        subject04.onNext(1);
+        subject04.onNext(2);
+        subject04.onNext(3);
+
+        subject04.subscribe(item -> System.out.println("Second, Received data = " + item));
+        subject04.onNext(4);
+        subject04.onComplete();
+
+    }
+
+    public void sampleCode07_custom_operator() {
+        Observable.just(1, 2, 3, 4)
+                .filter(item -> item%2 == 0)
+                .subscribe(item -> System.out.println("First, Received data = " + item));
+
+
+        Observable.just(1, 2, 3, 4)
+                .lift(takeEven())
+                .subscribe(item -> System.out.println("First, Received data = " + item));
+
+    }
+
+    private ObservableOperator<Integer, Integer> takeEven() {
+        return new ObservableOperator<Integer, Integer>() {
+            @Override
+            public @NonNull Observer<? super Integer> apply(@NonNull Observer<? super Integer> observer) throws Throwable {
+                return new DisposableObserver<Integer>() {
+                    @Override
+                    public void onNext(@NonNull Integer item) {
+                        if(item % 2 == 0) {
+                            observer.onNext(item);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                };
+            }
+        };
+    }
+
+    public void sampleCode08_custom_threading() {
+//        Observable.just(1, 2, 3, 4, 5)
+//                .doOnNext(item -> System.out.println("Pushing item " + item + " on " + Thread.currentThread().getName() + " thread \n"))
+//                .subscribeOn(Schedulers.io())
+//                .subscribeOn(Schedulers.computation())
+//                .subscribeOn(Schedulers.newThread())
+//                .subscribe(item -> {
+//                    System.out.println("Resived item " + item + " on " + Thread.currentThread().getName() + " thread \n");
+//                });
+
+
+        Observable.just("Test message")
+                .subscribeOn(Schedulers.io())
+                .doOnNext(item -> System.out.println("Emitting " + item + " on " + Thread.currentThread().getName() + " thread \n"))
+                .observeOn(Schedulers.single())
+                .observeOn(Schedulers.newThread())
+                .subscribe(item -> System.out.println("Observing " + item + " on " + Thread.currentThread().getName() + " thread \n"));
+
+        try{
+            Thread.sleep(10000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        //Schedulers
+        //computation - for heavy calculation (complex algorithms, processing images)
+        //io - intended to use for reading/writing from disk or network request
+        //newThread - for any new observer of some Onservable, new thread will be created
+        //single - intended to use when all items emitted by observable must be processed sequentially, one by ome on worker thread
 
 
 

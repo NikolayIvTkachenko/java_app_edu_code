@@ -35,7 +35,9 @@ public class Main {
         //rxJavaSample02.sampleCode03_filtering_conditional();
         //rxJavaSample02.sampleCode04_transforming_combining();
         //rxJavaSample02.sampleCode05_error_utilities();
-        rxJavaSample02.sampleCode06_subject();
+        //rxJavaSample02.sampleCode06_subject();
+        //rxJavaSample02.sampleCode07_custom_operator();
+        rxJavaSample02.sampleCode08_custom_threading();
 
 
 
